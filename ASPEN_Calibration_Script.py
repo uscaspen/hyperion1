@@ -17,7 +17,7 @@ def getdata(ser):
 def processdata(comportlogging, baudratelogging, numbbitspressure, typ, i, ptnum, maxval):
     ser = establishserial(comportlogging, baudratelogging)
     v = 0
-    v=float(v)
+    v = float(v)
     print(typ)
     print(ptnum)
     if typ is 1:
