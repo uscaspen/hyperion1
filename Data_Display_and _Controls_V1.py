@@ -42,7 +42,6 @@ def establishserial(comport, baud):
         print(Fore.WHITE)
 
 
-
 #def getdata(ser,testnumb, comportlogging, baudratecontrol,q):
 #    num = 0
 #    print(Fore.YELLOW + 'Data Gathering Start')
@@ -64,6 +63,12 @@ def establishserial(comport, baud):
 #                for row in fulldatastrings:
 #                    newrow=row.split(' ')
 #                    writer.writerow(newrow)
+def init_subplot(subplot_dim, title, y_lim): #Method for subplot initialization
+    temp = fig.add_subplot(subplot_dim)
+    temp.set_title(title)
+    temp.set_ylim(y_lim)
+    return temp
+
 
 def liveplotting(ser, numbbitsthermocouple):
     num = 0
@@ -72,38 +77,21 @@ def liveplotting(ser, numbbitsthermocouple):
     r = True
     line1=[]
     fig = plt.figure()
-    ax1 = fig.add_subplot(331)
-    ax1.set_title('TC 1')
-    ax1.set_ylim([0, 1000])
-    ax2 = fig.add_subplot(332)
-    ax2.set_title('TC 2')
-    ax2.set_ylim([0, 1000])
-    ax3 = fig.add_subplot(333)
-    ax3.set_title('TC 3')
-    ax3.set_ylim([0, 1000])
-    ax4 = fig.add_subplot(334)
-    ax4.set_title('TC 4')
-    ax4.set_ylim([0, 1000])
-    ax5 = fig.add_subplot(335)
-    ax5.set_title('PT 1')
-    ax5.set_ylim([0, 1200])
-    ax6 = fig.add_subplot(336)
-    ax6.set_title('PT 2')
-    ax6.set_ylim([0, 1200])
-    ax7 = fig.add_subplot(337)
-    ax7.set_title('PT 3')
-    ax7.set_ylim([0, 1200])
-    ax8 = fig.add_subplot(338)
-    ax8.set_title('PT 4')
-    ax8.set_ylim([0, 1200])
-    ax9 = fig.add_subplot(339)
-    ax9.set_title('FORCE 1')
-    ax9.set_ylim([0, 10])
-    fig.subplots_adjust(hspace=.3)
+
+    ax1 = init_subplot(331, 'TC 1', y_lim=[0, 1000]) #initializes subplots
+    ax2 = init_subplot(332, 'TC 2', y_lim=[0, 1000])
+    ax3 = init_subplot(333, 'TC 3', y_lim=[0, 1000])
+    ax4 = init_subplot(334, 'TC 4', y_lim=[0, 1000])
+    ax5 = init_subplot(335, 'PT 1', y_lim=[0, 1200])
+    ax6 = init_subplot(336, 'PT 2', y_lim=[0, 1200])
+    ax7 = init_subplot(337, 'PT 3', y_lim=[0, 1200])
+    ax8 = init_subplot(338, 'PT 4', y_lim=[0, 1200])
+    ax9 = init_subplot(339, 'FORCE 1', y_lim=[0, 10])
     print("Subplots added")
     try:
         print("attempting subplot")
-        ani = animation.FuncAnimation(fig, animate, fargs=(ser, ax1, ax2, ax3, ax4, ax5, ax6, ax7, ax8, ax9), interval=400, repeat=False)
+        ani = animation.FuncAnimation(fig, animate, fargs=(ser, ax1, ax2, ax3, ax4, ax5, ax6, ax7, ax8, ax9),
+                                      interval=200, repeat=False)
         plt.show()
     #while r == True:
     #    try:
@@ -188,46 +176,55 @@ def animate(i,ser, ax1, ax2, ax3, ax4, ax5, ax6, ax7, ax8, ax9):
         pt4list.append(pt4new)
         forcelist.append(forcenew)
         xar = timevect
+
         ax1.clear()
         ax1.plot(xar, tc1list, linewidth=.5)
         ax1.annotate(str(tc1new), xy=(tim, tc1new))
         ax1.set_title('TC 1')
         ax1.set_ylim([0, 1000])
+
         ax2.clear()
         ax2.plot(xar, tc2list, linewidth=.5)
         ax2.annotate(str(tc2new), xy=(tim, tc2new))
         ax2.set_title('TC 2')
         ax2.set_ylim([0, 1000])
+
         ax3.clear()
         ax3.plot(xar, tc3list, linewidth=.75)
         ax3.set_title('TC 3')
         ax3.set_ylim([0, 1000])
         ax3.annotate(str(tc3new), xy=(tim, tc3new))
+
         ax4.clear()
         ax4.plot(xar, tc4list, linewidth=.75)
         ax4.set_title('TC 4')
         ax4.set_ylim([0, 1000])
         ax4.annotate(str(tc4new), xy=(tim, tc4new))
+
         ax5.clear()
         ax5.plot(xar, pt1list, linewidth=.75)
         ax5.annotate(str(pt1new), xy=(tim, pt1new))
         ax5.set_ylim([0, 1200])
         ax5.set_title('PT 1')
+
         ax6.clear()
         ax6.plot(xar, pt2list, linewidth=.75)
         ax6.set_ylim([0, 1200])
         ax6.annotate(str(pt2new), xy=(tim, pt2new))
         ax6.set_title('PT 2')
+
         ax7.clear()
         ax7.plot(xar, pt3list, linewidth=.75)
         ax7.annotate(str(pt3new), xy=(tim, pt3new))
         ax7.set_ylim([0, 1200])
         ax7.set_title('PT 3')
+
         ax8.clear()
         ax8.plot(xar, pt4list, linewidth=.75)
         ax8.annotate(str(pt4new), xy=(tim, pt4new))
         ax8.set_ylim([0, 1200])
         ax8.set_title('PT 4')
+
         ax9.clear()
         ax9.plot(xar, pt4list, linewidth=.75)
         ax9.annotate(str(forcenew), xy=(tim, forcenew))
