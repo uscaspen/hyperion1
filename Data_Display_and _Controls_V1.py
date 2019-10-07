@@ -4,8 +4,7 @@ import csv
 from multiprocessing import Process, Queue
 import sys
 from colorama import Fore, Back, Style
-import matplotlib.pyplot as plt
-import numpy as np
+import statistics
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import os
@@ -42,28 +41,7 @@ def establishserial(comport, baud):
         print(Fore.WHITE)
 
 
-#def getdata(ser,testnumb, comportlogging, baudratecontrol,q):
-#    num = 0
-#    print(Fore.YELLOW + 'Data Gathering Start')
-#    print(Fore.WHITE)
-#    r = True
-#
-#    while r == True:
-#        try:
-#            data = ser.readline()[:-2]  # the last bit gets rid of the new-line chars
-#            utfdata = str(time.time())+" "+data.decode("utf-8")
-#            fulldatastrings.append(utfdata)
-#
-#        except KeyboardInterrupt:
-#            print(Fore.YELLOW + num)
-#            print(Fore.WHITE)
-#            r = False
-#            with open('AspenDaqdata.txt', 'w', newline='') as f:
-#                writer = csv.writer(f, dialect='excel')
-#                for row in fulldatastrings:
-#                    newrow=row.split(' ')
-#                    writer.writerow(newrow)
-def init_subplot(subplot_dim, title, y_lim): #Method for subplot initialization
+def init_subplot(fig,subplot_dim, title, y_lim): #Method for subplot initialization
     temp = fig.add_subplot(subplot_dim)
     temp.set_title(title)
     temp.set_ylim(y_lim)
@@ -78,37 +56,23 @@ def liveplotting(ser, numbbitsthermocouple):
     line1=[]
     fig = plt.figure()
 
-    ax1 = init_subplot(331, 'TC 1', y_lim=[0, 1000]) #initializes subplots
-    ax2 = init_subplot(332, 'TC 2', y_lim=[0, 1000])
-    ax3 = init_subplot(333, 'TC 3', y_lim=[0, 1000])
-    ax4 = init_subplot(334, 'TC 4', y_lim=[0, 1000])
-    ax5 = init_subplot(335, 'PT 1', y_lim=[0, 1200])
-    ax6 = init_subplot(336, 'PT 2', y_lim=[0, 1200])
-    ax7 = init_subplot(337, 'PT 3', y_lim=[0, 1200])
-    ax8 = init_subplot(338, 'PT 4', y_lim=[0, 1200])
-    ax9 = init_subplot(339, 'FORCE 1', y_lim=[0, 10])
+    ax1 = init_subplot(fig, 331, 'TC 1', y_lim=[0, 1000]) #initializes subplots
+    ax2 = init_subplot(fig, 332, 'TC 2', y_lim=[0, 1000])
+    ax3 = init_subplot(fig, 333, 'TC 3', y_lim=[0, 1000])
+    ax4 = init_subplot(fig, 334, 'TC 4', y_lim=[0, 1000])
+    ax5 = init_subplot(fig, 335, 'PT 1', y_lim=[0, 1200])
+    ax6 = init_subplot(fig, 336, 'PT 2', y_lim=[0, 1200])
+    ax7 = init_subplot(fig, 337, 'PT 3', y_lim=[0, 1200])
+    ax8 = init_subplot(fig, 338, 'PT 4', y_lim=[0, 1200])
+    ax9 = init_subplot(fig, 339, 'FORCE 1', y_lim=[0, 10])
+    fig.subplots_adjust(hspace=.3)
     print("Subplots added")
     try:
         print("attempting subplot")
         ani = animation.FuncAnimation(fig, animate, fargs=(ser, ax1, ax2, ax3, ax4, ax5, ax6, ax7, ax8, ax9),
                                       interval=200, repeat=False)
         plt.show()
-    #while r == True:
-    #    try:
-    #        data = ser.readline()[:-2]  # the last bit gets rid of the new-line chars
-    #        utfdata = str(time.clock())+" "+str(data, 'utf-8', errors='ignore')
-    #        fulldatastrings.append(utfdata)
-    #       tim, tc1, tc2, tc3, tc4, pt1, pt2, pt3, pt4, forc = splitdata(utfdata, numbbitsthermocouple)
-    #       timevect.append(tim)
-    #        tc1list.append(tc1)
-    #        tc2list.append(tc2)
-    #        tc3list.append(tc3)
-    #        tc4list.append(tc4)
-    #        pt1list.append(pt1)
-    #        pt2list.append(pt2)
-    #        pt3list.append(pt3)
-    #        pt4list.append(pt4)
-    #       forcelist.append(forc)
+
     except:
         printerror("animation failed")
 
@@ -144,15 +108,25 @@ def animate(i,ser, ax1, ax2, ax3, ax4, ax5, ax6, ax7, ax8, ax9):
         except:
             pass
     try:
-        tc1 = sum(intertc1) / len(intertc1)
-        tc2 = sum(intertc2) / len(intertc2)
-        tc3 = sum(intertc3) / len(intertc3)
-        tc4 = sum(intertc4) / len(intertc4)
-        pt1 = sum(interpt1) / len(interpt1)
-        pt2 = sum(interpt2) / len(interpt2)
-        pt3 = sum(interpt3) / len(interpt3)
-        pt4 = sum(interpt4) / len(interpt4)
-        forc = sum(interforce)/len(interforce)
+        if statistics.stdev(intertc1)<1200:
+            tc1 = sum(intertc1) / len(intertc1)
+        if statistics.stdev(intertc2) < 1200:
+            tc2 = sum(intertc2) / len(intertc2)
+        if statistics.stdev(intertc3) < 1200:
+            tc3 = sum(intertc3) / len(intertc3)
+        if statistics.stdev(intertc4) < 1200:
+            tc4 = sum(intertc4) / len(intertc4)
+        if statistics.stdev(interpt1) < 1200:
+            pt1 = sum(interpt1) / len(interpt1)
+        if statistics.stdev(interpt2) < 1200:
+            pt2 = sum(interpt2) / len(interpt2)
+        if statistics.stdev(interpt3) < 1200:
+            pt3 = sum(interpt3) / len(interpt3)
+        if statistics.stdev(interpt4) < 1200:
+
+            pt4 = sum(interpt4) / len(interpt4)
+        if statistics.stdev(interforce) < 1200:
+            forc = sum(interforce)/len(interforce)
     except:
         pass
     try:
@@ -178,13 +152,13 @@ def animate(i,ser, ax1, ax2, ax3, ax4, ax5, ax6, ax7, ax8, ax9):
         xar = timevect
 
         ax1.clear()
-        ax1.plot(xar, tc1list, linewidth=.5)
+        ax1.plot(xar, tc1list, linewidth=.75)
         ax1.annotate(str(tc1new), xy=(tim, tc1new))
         ax1.set_title('TC 1')
         ax1.set_ylim([0, 1000])
 
         ax2.clear()
-        ax2.plot(xar, tc2list, linewidth=.5)
+        ax2.plot(xar, tc2list, linewidth=.75)
         ax2.annotate(str(tc2new), xy=(tim, tc2new))
         ax2.set_title('TC 2')
         ax2.set_ylim([0, 1000])
