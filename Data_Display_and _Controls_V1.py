@@ -98,11 +98,12 @@ def liveplotting(ser, numbbitsthermocouple):
     ax8.set_ylim([0, 1200])
     ax9 = fig.add_subplot(339)
     ax9.set_title('FORCE 1')
-    ax8.set_ylim([0, 10])
+    ax9.set_ylim([0, 10])
+    fig.subplots_adjust(hspace=.3)
     print("Subplots added")
     try:
         print("attempting subplot")
-        ani = animation.FuncAnimation(fig, animate, fargs=(ser, ax1, ax2, ax3, ax4, ax5, ax6, ax7, ax8, ax9), interval=200, repeat=False)
+        ani = animation.FuncAnimation(fig, animate, fargs=(ser, ax1, ax2, ax3, ax4, ax5, ax6, ax7, ax8, ax9), interval=400, repeat=False)
         plt.show()
     #while r == True:
     #    try:
@@ -198,37 +199,37 @@ def animate(i,ser, ax1, ax2, ax3, ax4, ax5, ax6, ax7, ax8, ax9):
         ax2.set_title('TC 2')
         ax2.set_ylim([0, 1000])
         ax3.clear()
-        ax3.plot(xar, tc3list, linewidth=.5)
+        ax3.plot(xar, tc3list, linewidth=.75)
         ax3.set_title('TC 3')
         ax3.set_ylim([0, 1000])
         ax3.annotate(str(tc3new), xy=(tim, tc3new))
         ax4.clear()
-        ax4.plot(xar, tc4list, linewidth=.5)
+        ax4.plot(xar, tc4list, linewidth=.75)
         ax4.set_title('TC 4')
         ax4.set_ylim([0, 1000])
         ax4.annotate(str(tc4new), xy=(tim, tc4new))
         ax5.clear()
-        ax5.plot(xar, pt1list, linewidth=.5)
+        ax5.plot(xar, pt1list, linewidth=.75)
         ax5.annotate(str(pt1new), xy=(tim, pt1new))
         ax5.set_ylim([0, 1200])
         ax5.set_title('PT 1')
         ax6.clear()
-        ax6.plot(xar, pt2list, linewidth=.5)
+        ax6.plot(xar, pt2list, linewidth=.75)
         ax6.set_ylim([0, 1200])
         ax6.annotate(str(pt2new), xy=(tim, pt2new))
         ax6.set_title('PT 2')
         ax7.clear()
-        ax7.plot(xar, pt3list, linewidth=.5)
+        ax7.plot(xar, pt3list, linewidth=.75)
         ax7.annotate(str(pt3new), xy=(tim, pt3new))
         ax7.set_ylim([0, 1200])
         ax7.set_title('PT 3')
         ax8.clear()
-        ax8.plot(xar, pt4list, linewidth=.5)
+        ax8.plot(xar, pt4list, linewidth=.75)
         ax8.annotate(str(pt4new), xy=(tim, pt4new))
         ax8.set_ylim([0, 1200])
         ax8.set_title('PT 4')
         ax9.clear()
-        ax9.plot(xar, pt4list, linewidth=.5)
+        ax9.plot(xar, pt4list, linewidth=.75)
         ax9.annotate(str(forcenew), xy=(tim, forcenew))
         ax9.set_ylim([0, 10])
         ax9.set_title('Force 1')
@@ -288,19 +289,20 @@ def processpressure1(utfvalpressure):
 def processpressure2(utfvalpressure):
     maxval = 4.988
     voltage = (utfvalpressure / (2 ** 16)) * 3.3
-    newval = ((voltage*642.91697145) - 19.16682956)
+    #newval = ((voltage*642.91697145) - 19.16682956)
+    newval = ((voltage * 578.49496819) - 9.95581312)
     return newval
 
 def processpressure3(utfvalpressure):
     maxval = 5.008
     voltage = (utfvalpressure / (2 ** 16)) * 3.3
-    newval = ((voltage*667.90201473) - 20.17582263)
+    newval = ((voltage*667.50669696) - 26.81864874)
     return newval
 
 def processpressure4(utfvalpressure):
     maxval = 5.005
     voltage = (utfvalpressure / (2 ** 16)) * 3.3
-    newval = ((voltage * 585.55952032) - 13.50447115)
+    newval = ((voltage * 588.28977476) - 15.66580876)
     return newval
 
 
