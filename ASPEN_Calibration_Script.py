@@ -93,14 +93,16 @@ def getreferencevoltage():
     type = input("What type of sensor for this test?: ")
     numb=0
     if type == 'Thermocouple':
-        output = input("What temperature is being tested?: ")
+        #output = input("What temperature is being tested?: ")
         numb = 1
         ptnum = 0
         maxval = 5
     else:
         ptnum = input("What PT is being tested: ")
-        output = input("What pressure is being tested: ")
-        maxval = input("What is max voltage: ")
+        #output = input("What pressure is being tested: ")
+        #maxval = input("What is max voltage: ")
+        output=20
+        maxval=4.996
         numb = 0
     return numb, float(output), int(ptnum), float(maxval)
 
