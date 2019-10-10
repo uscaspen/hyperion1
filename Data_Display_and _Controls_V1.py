@@ -89,6 +89,15 @@ def animate(i,ser, ax1, ax2, ax3, ax4, ax5, ax6, ax7, ax8, ax9):
     interpt3 = []
     interpt4 = []
     interforce = []
+    tc1=0
+    tc2=0
+    tc3=0
+    tc4=0
+    pt1=0
+    pt2=0
+    pt3=0
+    pt4=0
+    forc=0
     tim = time.perf_counter()
     while(time.perf_counter() < starttime+.03):
         try:
@@ -108,7 +117,7 @@ def animate(i,ser, ax1, ax2, ax3, ax4, ax5, ax6, ax7, ax8, ax9):
         except:
             pass
     try:
-        if statistics.stdev(intertc1)<1200:
+        if statistics.stdev(intertc1) < 1200:
             tc1 = sum(intertc1) / len(intertc1)
         if statistics.stdev(intertc2) < 1200:
             tc2 = sum(intertc2) / len(intertc2)
@@ -150,7 +159,7 @@ def animate(i,ser, ax1, ax2, ax3, ax4, ax5, ax6, ax7, ax8, ax9):
         pt4list.append(pt4new)
         forcelist.append(forcenew)
         xar = timevect
-
+        #print(tim)
         ax1.clear()
         ax1.plot(xar, tc1list, linewidth=.75)
         ax1.annotate(str(tc1new), xy=(tim, tc1new))
@@ -341,7 +350,26 @@ def main(configpath):
         try:
             liveplotting(ser, numbbitsthermocouple)
         except:
-            printerror("live plotting failed")
+            testnumb=1
+            try:
+                print(fulldatastrings)
+                with open('DAQGraph_raw_{}.txt'.format(testnumb), 'w', newline='') as f:
+                    writer = csv.writer(f, dialect='excel')
+                    for row in fulldatastrings:
+                        newrow = row.split(' ')
+                        writer.writerow(newrow)
+            except:
+                print("Didnt print to csv")
+        try:
+            print(fulldatastrings)
+            testnumb=1
+            with open('DAQGraph_raw_{}.txt'.format(testnumb), 'w', newline='') as f:
+                writer = csv.writer(f, dialect='excel')
+                for row in fulldatastrings:
+                    newrow = row.split(' ')
+                    writer.writerow(newrow)
+        except:
+            print("csv didnt print")
     except:
         printerror("Data Display And Control Did Not Function")
 

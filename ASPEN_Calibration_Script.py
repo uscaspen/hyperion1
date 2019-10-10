@@ -20,6 +20,7 @@ def processdata(comportlogging, baudratelogging, numbbitspressure, typ, i, ptnum
     v = float(v)
     print(typ)
     print(ptnum)
+    currentval = 0
     if typ is 1:
         v = i*(5*(10**(-3))+1.25)
         print(v)
@@ -44,28 +45,33 @@ def processdata(comportlogging, baudratelogging, numbbitspressure, typ, i, ptnum
     #print(refrenceval)
     iterval = 0
     diffr=[]
-    while True:
-        try:
-            time.sleep(.1)
-            val = getdata(ser)
-            time.sleep(.1)
-            result = val.split(" ")
-            if len(result) is 9:
-                print (result)
-                res = result[ptnum+3]
+    l=False
+    while currentval<=ptnum:
+        i=input("Ready?: ")
+        while l==False:
+            try:
+                time.sleep(.1)
+                val = getdata(ser)
+                time.sleep(.1)
+                result = val.split(" ")
+                if len(result) is 9:
+                    print(result)
+                    res = result[ptnum+3]
             #if int(result[iterval]) < (refrenceval-10):
             #    printoutsiderange("TURN RIGHT:{}, {}".format(result[iterval], refrenceval))
             #if int(result[iterval]) > (refrenceval + 10):
             #    printoutsiderange("TURN LEFT:{}, {}".format(result[iterval], refrenceval))
             #if (refrenceval - 10) < int(result[iterval]) < (refrenceval + 10):
             #    printinrange("CALIBRATED:{}".format(result[iterval]))
-                printoutsiderange("{}".format(int(res)))
-                diffr.append(int(res))
-        except KeyboardInterrupt:
-            avg = (sum(diffr)/len(diffr))
-            print("complete")
-            printinrange("Average diffrence: {}".format(avg))
-            sys.exit()
+                    printoutsiderange("{}".format(int(res)))
+                    diffr.append(int(res))
+            except KeyboardInterrupt:
+                avg = (sum(diffr)/len(diffr))
+                print("complete")
+                printinrange("Average diffrence: {}".format(avg))
+                l = True
+        currentval = currentval+1
+    sys.exit()
 
 
 def establishserial(comport, baud):
@@ -98,7 +104,7 @@ def getreferencevoltage():
         ptnum = 0
         maxval = 5
     else:
-        ptnum = input("What PT is being tested: ")
+        ptnum = input("How many tests to run: ")
         #output = input("What pressure is being tested: ")
         #maxval = input("What is max voltage: ")
         output=20

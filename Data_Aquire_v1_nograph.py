@@ -82,7 +82,7 @@ def threaddata(testnumber, comportlogging, baudratelogging, q):
 
 def startcontrol(configdata):
     controlpath = str(configdata[0])
-    proc = subprocess.Popen(['python', '{}'.format(controlpath), '{}'.format(configdata)], shell=True)
+    proc = subprocess.Popen(['python', ' "{}"'.format(controlpath), ' {}'.format(configdata)], shell=True)
     return proc
 
 
