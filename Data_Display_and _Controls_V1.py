@@ -70,7 +70,7 @@ def liveplotting(ser, numbbitsthermocouple):
     try:
         print("attempting subplot")
         ani = animation.FuncAnimation(fig, animate, fargs=(ser, ax1, ax2, ax3, ax4, ax5, ax6, ax7, ax8, ax9),
-                                      interval=200, repeat=False)
+                                      interval=400, repeat=False)
         plt.show()
 
     except:
@@ -117,25 +117,16 @@ def animate(i,ser, ax1, ax2, ax3, ax4, ax5, ax6, ax7, ax8, ax9):
         except:
             pass
     try:
-        if statistics.stdev(intertc1) < 1200:
-            tc1 = sum(intertc1) / len(intertc1)
-        if statistics.stdev(intertc2) < 1200:
-            tc2 = sum(intertc2) / len(intertc2)
-        if statistics.stdev(intertc3) < 1200:
-            tc3 = sum(intertc3) / len(intertc3)
-        if statistics.stdev(intertc4) < 1200:
-            tc4 = sum(intertc4) / len(intertc4)
-        if statistics.stdev(interpt1) < 1200:
-            pt1 = sum(interpt1) / len(interpt1)
-        if statistics.stdev(interpt2) < 1200:
-            pt2 = sum(interpt2) / len(interpt2)
-        if statistics.stdev(interpt3) < 1200:
-            pt3 = sum(interpt3) / len(interpt3)
-        if statistics.stdev(interpt4) < 1200:
+        tc1 = sum(intertc1) / len(intertc1)
+        tc2 = sum(intertc2) / len(intertc2)
+        tc3 = sum(intertc3) / len(intertc3)
+        tc4 = sum(intertc4) / len(intertc4)
+        pt1 = sum(interpt1) / len(interpt1)
+        pt2 = sum(interpt2) / len(interpt2)
+        pt3 = sum(interpt3) / len(interpt3)
+        pt4 = sum(interpt4) / len(interpt4)
+        forc = sum(interforce)/len(interforce)
 
-            pt4 = sum(interpt4) / len(interpt4)
-        if statistics.stdev(interforce) < 1200:
-            forc = sum(interforce)/len(interforce)
     except:
         pass
     try:
@@ -187,7 +178,7 @@ def animate(i,ser, ax1, ax2, ax3, ax4, ax5, ax6, ax7, ax8, ax9):
         ax5.clear()
         ax5.plot(xar, pt1list, linewidth=.75)
         ax5.annotate(str(pt1new), xy=(tim, pt1new))
-        ax5.set_ylim([0, 1200])
+        ax5.set_ylim([0, 2500])
         ax5.set_title('PT 1')
 
         ax6.clear()
@@ -262,7 +253,8 @@ def processtemp(utfvaltemp, numbbitsthermocouple):
 def processpressure1(utfvalpressure):
     maxval = 4.996
     voltage = (utfvalpressure/(2 ** 16))*3.3
-    newval=((voltage*603.34657082)-33.20529496)
+    #newval=((voltage*603.34657082)-33.20529496)
+    newval=((voltage*1054.69910571)-32.21205905)
     return newval
 
 
@@ -270,19 +262,21 @@ def processpressure2(utfvalpressure):
     maxval = 4.988
     voltage = (utfvalpressure / (2 ** 16)) * 3.3
     #newval = ((voltage*642.91697145) - 19.16682956)
-    newval = ((voltage * 578.49496819) - 9.95581312)
+    newval = ((voltage * 584.66382779) - 8.79359681-1)
     return newval
 
 def processpressure3(utfvalpressure):
     maxval = 5.008
     voltage = (utfvalpressure / (2 ** 16)) * 3.3
-    newval = ((voltage*667.50669696) - 26.81864874)
+    #newval = ((voltage*667.50669696) - 26.81864874)
+    newval = ((voltage*603.47243523) - 13.90815653+1)
     return newval
 
 def processpressure4(utfvalpressure):
     maxval = 5.005
     voltage = (utfvalpressure / (2 ** 16)) * 3.3
-    newval = ((voltage * 588.28977476) - 15.66580876)
+    #newval = ((voltage * 588.28977476) - 15.66580876)
+    newval = ((voltage * 613.08632991) - 18.65642917+1)
     return newval
 
 

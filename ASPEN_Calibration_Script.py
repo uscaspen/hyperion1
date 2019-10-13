@@ -14,7 +14,7 @@ def getdata(ser):
     return utfdata
 
 
-def processdata(comportlogging, baudratelogging, numbbitspressure, typ, i, ptnum, maxval):
+def processdata(comportlogging, baudratelogging, numbbitspressure, typ, i, ptnum, maxval,howmany):
     ser = establishserial(comportlogging, baudratelogging)
     v = 0
     v = float(v)
@@ -45,9 +45,15 @@ def processdata(comportlogging, baudratelogging, numbbitspressure, typ, i, ptnum
     #print(refrenceval)
     iterval = 0
     diffr=[]
+    res=""
     l=False
-    while currentval<=ptnum:
+    while currentval<howmany:
+        l=False
         i=input("Ready?: ")
+        diffr.clear()
+        val = ""
+        res = ""
+
         while l==False:
             try:
                 time.sleep(.1)
@@ -101,16 +107,18 @@ def getreferencevoltage():
     if type == 'Thermocouple':
         #output = input("What temperature is being tested?: ")
         numb = 1
-        ptnum = 0
+        #ptnum = 0
         maxval = 5
     else:
-        ptnum = input("How many tests to run: ")
+        ptnum = input("What pt: ")
+        #howmany =input("How many tests to run: ")
+        howmany = 1
         #output = input("What pressure is being tested: ")
         #maxval = input("What is max voltage: ")
         output=20
         maxval=4.996
         numb = 0
-    return numb, float(output), int(ptnum), float(maxval)
+    return numb, float(output), int(ptnum), float(maxval), int(howmany)
 
 
 def printoutsiderange(val):
@@ -146,7 +154,7 @@ def main():
     except:
         printerror("Banner Did Not Print")
     configdata, filepath = getconfigfile()
-    typ, val, ptnum, maxval = getreferencevoltage()
+    typ, val, ptnum, maxval,howmany = getreferencevoltage()
     comportlogging = configdata[3]
     baudratelogging = int(configdata[4])
     numbbitsthermocouple = int(configdata[7])
@@ -155,7 +163,7 @@ def main():
     pressuresensorrange = int(configdata[10])
     forcesensorrange = int(configdata[11])
     numbbitsforce = int(configdata[12])
-    processdata(comportlogging, baudratelogging, numbbitspressure, typ, val, ptnum, maxval)
+    processdata(comportlogging, baudratelogging, numbbitspressure, typ, val, ptnum, maxval, howmany)
 
 
 if __name__ == '__main__':
